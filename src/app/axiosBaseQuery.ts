@@ -6,6 +6,7 @@ const axiosInstance = axios.create({
     baseURL: 'http://localhost:3030/api',
     headers: { 'Content-Type': 'application/json' },
     timeout: 10000,
+    withCredentials: true,
 });
 
 // Request interceptor to add auth token

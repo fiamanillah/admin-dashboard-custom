@@ -1,8 +1,10 @@
 // src/app/router.tsx
 import { createBrowserRouter } from 'react-router';
-import { ProtectedRoute } from '@/components/layout/protected-route';
+import { ProtectedRoute } from '@/layout/protected-route';
 import { LoginForm } from '@/components/ui/login-form';
-
+import Dashboard from '@/pages/Dashboard/Dashboard';
+import DashboardLayout from '@/layout/dashboard-layout';
+import Users from '@/pages/Users/Users';
 const router = createBrowserRouter([
     {
         path: '/login',
@@ -13,24 +15,24 @@ const router = createBrowserRouter([
         ),
     },
     {
-        path: '/',
+        path: '/dashboard',
         element: (
             <ProtectedRoute>
-                <h1>Dashboard</h1>
+                <DashboardLayout />
             </ProtectedRoute>
         ),
         children: [
             {
                 index: true,
-                element: <h1>Dashboard</h1>,
+                element: <Dashboard />,
             },
             {
                 path: 'dashboard',
                 element: <h1>Dashboard</h1>,
             },
             {
-                path: 'profile',
-                element: <h1>Profile</h1>,
+                path: 'users',
+                element: <Users />,
             },
         ],
     },

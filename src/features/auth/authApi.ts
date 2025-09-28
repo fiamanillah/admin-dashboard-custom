@@ -15,7 +15,7 @@ export const authApi = createApi({
                 method: 'POST',
                 data: credentials,
             }),
-            async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+            async onQueryStarted(_, { dispatch, queryFulfilled }) {
                 try {
                     const { data } = await queryFulfilled;
 
@@ -23,12 +23,11 @@ export const authApi = createApi({
                     dispatch(
                         setCredentials({
                             user: data.user,
-                            token: data.token,
+                            token: data.data.token,
                         })
                     );
 
-                    // Store refresh token separately (consider secure storage in production)
-                    localStorage.setItem('refreshToken', data.refreshToken);
+                    console.log('Login success:', data);
                 } catch (error) {
                     // Handle login error if needed
                     console.error('Login failed:', error);
@@ -37,13 +36,22 @@ export const authApi = createApi({
             invalidatesTags: ['Auth', 'User'],
         }),
 
+        // profile
+        profile: builder.query({
+            query: () => ({
+                url: '/auth/profile',
+                method: 'GET',
+            }),
+            providesTags: ['Profile'],
+        }),
+
         register: builder.mutation({
             query: userData => ({
                 url: '/auth/register',
                 method: 'POST',
                 data: userData,
             }),
-            async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+            async onQueryStarted(_, { dispatch, queryFulfilled }) {
                 try {
                     const { data } = await queryFulfilled;
 
@@ -67,7 +75,7 @@ export const authApi = createApi({
                 url: '/auth/logout',
                 method: 'POST',
             }),
-            async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+            async onQueryStarted(_, { dispatch, queryFulfilled }) {
                 try {
                     await queryFulfilled;
                 } catch (error) {
@@ -88,7 +96,7 @@ export const authApi = createApi({
                 method: 'POST',
                 data: { refreshToken },
             }),
-            async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+            async onQueryStarted(_, { dispatch, queryFulfilled }) {
                 try {
                     const { data } = await queryFulfilled;
 
@@ -111,5 +119,10 @@ export const authApi = createApi({
 });
 
 // Export hooks for components
-export const { useLoginMutation, useRegisterMutation, useLogoutMutation, useRefreshTokenMutation } =
-    authApi;
+export const {
+    useLoginMutation,
+    useProfileQuery,
+    useRegisterMutation,
+    useLogoutMutation,
+    useRefreshTokenMutation,
+} = authApi;
