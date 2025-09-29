@@ -10,10 +10,11 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
-import { MoreHorizontal } from 'lucide-react';
+import { LinkIcon, Loader, MoreHorizontal } from 'lucide-react';
 import EditUser from './EditUser';
 import type { TUser } from './type';
-
+import { Badge } from '@/components/ui/badge';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 export const columns: ColumnDef<TUser>[] = [
     {
         id: 'avatarUrl',
@@ -60,17 +61,71 @@ export const columns: ColumnDef<TUser>[] = [
         id: 'role',
         accessorKey: 'role',
         header: 'Role',
+        cell: ({ row }) => (
+            <Badge className={`capitalize ${row.original.role === 'admin' && 'bg-destructive'}`}>
+                {row.original.role}
+            </Badge>
+        ),
     },
     {
         id: 'status',
         accessorKey: 'status',
         header: 'Status',
+        cell: ({ row }) => (
+            <Badge
+                className={`capitalize ${
+                    row.original.status === 'active'
+                        ? 'bg-chart-2'
+                        : row.original.status === 'pending_verification'
+                        ? 'bg-destructive'
+                        : 'bg-chart-4'
+                }`}
+            >
+                {row.original.status === 'pending_verification' && (
+                    <Loader className="h-4 w-4 text-secondary-foreground" />
+                )}
+                {row.original.status}
+            </Badge>
+        ),
     },
+    {
+        id: 'instagramUrl',
+        accessorKey: 'instagramUrl',
+        header: 'Instagram',
+        cell: ({ row }) => (
+            <a
+                href={row.original.instagramUrl || ''}
+                className="truncate hover:underline flex gap-2  items-center"
+            >
+                <LinkIcon className="w-4 h-4" /> Instagram
+            </a>
+        ),
+    },
+
     {
         id: 'createdAt',
         accessorKey: 'createdAt',
         header: 'Created At',
         cell: ({ row }) => formatDate(row.original.createdAt || ''),
+    },
+    {
+        id: 'bio',
+        accessorKey: 'bio',
+        header: 'Bio',
+        cell: ({ row }) => {
+            return (
+                <Popover>
+                    <PopoverTrigger className="flex items-center ">
+                        <Badge className={`${row.original.bio ? 'bg-chart-2' : 'bg-chart-4'}`}>
+                            {row.original.bio
+                                ? row.original.bio?.trim().slice(0, 20) + '...'
+                                : 'No bio'}
+                        </Badge>
+                    </PopoverTrigger>
+                    <PopoverContent>{row.original.bio}</PopoverContent>
+                </Popover>
+            );
+        },
     },
     {
         id: 'actions',
@@ -93,7 +148,7 @@ export const columns: ColumnDef<TUser>[] = [
                             Copy User ID
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem>View customer</DropdownMenuItem>
+
                         <DropdownMenuItem>View payment details</DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>

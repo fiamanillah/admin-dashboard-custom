@@ -30,15 +30,29 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
-import { useUpdateUserMutation } from '@/features/users/userApi';
+import { useDeleteUserMutation, useUpdateUserMutation } from '@/features/users/userApi';
 import type z from 'zod';
-import { useState } from 'react';
-
+import { useEffect, useState } from 'react';
+import { Trash } from 'lucide-react';
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
+import { toast } from 'sonner';
+import { getErrorMessage } from '@/utils/getErrorMessage';
 function EditUser({ item, trigger }: { item: TUser; trigger: React.ReactNode }) {
     const isMobile = useIsMobile();
     const [open, setOpen] = useState(false);
 
     const [updateUser, { isLoading }] = useUpdateUserMutation();
+    const [deleteUser, { isLoading: isDeleting }] = useDeleteUserMutation();
 
     const form = useForm<z.infer<typeof UsersFormSchema>>({
         resolver: zodResolver(UsersFormSchema),
@@ -51,8 +65,8 @@ function EditUser({ item, trigger }: { item: TUser; trigger: React.ReactNode }) 
             deletedAt: item.deletedAt ? new Date(item.deletedAt) : null,
             // Ensure nullable fields are properly handled
             bio: item.bio || '',
-            avatarUrl: item.avatarUrl || '',
-            instagramUrl: item.instagramUrl || '',
+            avatarUrl: item.avatarUrl,
+            instagramUrl: item.instagramUrl,
             username: item.username || '',
             emailVerifiedAt: item.emailVerifiedAt || null,
             tapPayCustomerId: item.tapPayCustomerId || null,
@@ -62,14 +76,49 @@ function EditUser({ item, trigger }: { item: TUser; trigger: React.ReactNode }) 
         },
     });
 
+    useEffect(() => {
+        if (open) {
+            form.reset({
+                ...item,
+                createdAt: item.createdAt ? new Date(item.createdAt) : undefined,
+                updatedAt: item.updatedAt ? new Date(item.updatedAt) : undefined,
+                lastLoginAt: item.lastLoginAt ? new Date(item.lastLoginAt) : null,
+                deletedAt: item.deletedAt ? new Date(item.deletedAt) : null,
+                bio: item.bio || '',
+                avatarUrl: item.avatarUrl,
+                instagramUrl: item.instagramUrl,
+                username: item.username || '',
+                emailVerifiedAt: item.emailVerifiedAt || null,
+                tapPayCustomerId: item.tapPayCustomerId || null,
+                stripeCustomerId: item.stripeCustomerId || null,
+                rewardfullAffiliateId: item.rewardfullAffiliateId || null,
+                isDeleted: item.isDeleted || false,
+            });
+        }
+    }, [open, item, form]);
+
     const onSubmit = async (data: z.infer<typeof UsersFormSchema>) => {
         try {
-            await updateUser({ id: item.id, data: data }).unwrap();
-            setOpen(false); // Close the drawer on success
-            form.reset(); // Reset form state
+            const res = await updateUser({ id: item.id, data }).unwrap();
+            setOpen(false);
+            toast.success(res.message || 'User updated successfully');
+            form.reset(res.data); // reset with updated user
         } catch (error) {
             console.error('Failed to update user:', error);
-            // You might want to show a toast notification here
+            toast.error(getErrorMessage(error));
+        }
+    };
+
+    const onDelete = async (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        try {
+            const res = await deleteUser(item.id).unwrap();
+            setOpen(false);
+            toast.success(res.message || 'User deleted successfully');
+            form.reset();
+        } catch (error) {
+            console.error('Failed to delete user:', error);
+            toast.error(getErrorMessage(error));
         }
     };
 
@@ -78,7 +127,37 @@ function EditUser({ item, trigger }: { item: TUser; trigger: React.ReactNode }) 
             <DrawerTrigger asChild>{trigger}</DrawerTrigger>
             <DrawerContent>
                 <DrawerHeader className="gap-1">
-                    <DrawerTitle>{item.displayName}</DrawerTitle>
+                    <div className="flex items-center justify-between">
+                        <DrawerTitle>{item.displayName}</DrawerTitle>
+
+                        <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                                <Button size={'icon'} variant={'destructive'}>
+                                    <Trash className="h-4 w-4" />
+                                </Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                                <AlertDialogHeader>
+                                    <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                                    <AlertDialogDescription>
+                                        This action cannot be undone. This will permanently delete
+                                        your account and remove your data from our servers.
+                                    </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                    <AlertDialogAction
+                                        className="bg-destructive hover:bg-destructive/60"
+                                        onClick={onDelete}
+                                        type="button"
+                                        disabled={isDeleting}
+                                    >
+                                        {isDeleting ? 'Deleting...' : 'Delete'}
+                                    </AlertDialogAction>
+                                </AlertDialogFooter>
+                            </AlertDialogContent>
+                        </AlertDialog>
+                    </div>
                     <DrawerDescription>Edit user details</DrawerDescription>
                 </DrawerHeader>
                 <div className="flex flex-col gap-4 overflow-y-auto px-4 text-sm">

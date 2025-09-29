@@ -7,12 +7,17 @@ import DashboardLayout from '@/layout/dashboard-layout';
 import Users from '@/pages/Users/Users';
 const router = createBrowserRouter([
     {
-        path: '/login',
-        element: (
-            <ProtectedRoute requireAuth={false}>
-                <LoginForm />
-            </ProtectedRoute>
-        ),
+        path: '/',
+        children: [
+            {
+                index: true,
+                element: <LoginForm />,
+            },
+            {
+                path: 'login',
+                element: <LoginForm />,
+            },
+        ],
     },
     {
         path: '/dashboard',
