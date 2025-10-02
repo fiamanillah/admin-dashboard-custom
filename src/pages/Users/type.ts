@@ -9,7 +9,7 @@ const statusSchema = z.enum(
 
 export const UsersFormSchema = z.object({
     id: z.string().optional(),
-    email: z.string().email('Enter a valid email').nonempty('Email is required').optional(),
+    email: z.email('Enter a valid email').nonempty('Email is required').optional(),
     username: z.string().nullable().optional(),
     firstName: z
         .string()

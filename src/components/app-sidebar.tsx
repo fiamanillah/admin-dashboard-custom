@@ -20,6 +20,8 @@ import {
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
 
+import { cn } from '@/lib/utils';
+
 const data = {
     user: {
         name: 'shadcn',
@@ -38,8 +40,8 @@ const data = {
             icon: IconUsers,
         },
         {
-            title: 'Lifecycle',
-            url: '#',
+            title: 'Courses',
+            url: '/dashboard/courses',
             icon: IconListDetails,
         },
         {

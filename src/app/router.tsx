@@ -5,6 +5,8 @@ import { LoginForm } from '@/components/ui/login-form';
 import Dashboard from '@/pages/Dashboard/Dashboard';
 import DashboardLayout from '@/layout/dashboard-layout';
 import Users from '@/pages/Users/Users';
+import Courses from '@/pages/Course/Courses';
+import Modules from '@/pages/Modules/Modules';
 const router = createBrowserRouter([
     {
         path: '/',
@@ -14,7 +16,7 @@ const router = createBrowserRouter([
                 element: <LoginForm />,
             },
             {
-                path: 'login',
+                path: '/login',
                 element: <LoginForm />,
             },
         ],
@@ -38,6 +40,20 @@ const router = createBrowserRouter([
             {
                 path: 'users',
                 element: <Users />,
+            },
+
+            {
+                path: 'courses',
+                element: <Courses />,
+            },
+            {
+                path: 'courses/:courseId/modules',
+                element: <Modules />,
+            },
+
+            {
+                path: '*',
+                element: <h1>404</h1>,
             },
         ],
     },

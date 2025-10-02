@@ -77,8 +77,8 @@ export const columns: ColumnDef<TUser>[] = [
                     row.original.status === 'active'
                         ? 'bg-chart-2'
                         : row.original.status === 'pending_verification'
-                        ? 'bg-destructive'
-                        : 'bg-chart-4'
+                          ? 'bg-destructive'
+                          : 'bg-chart-4'
                 }`}
             >
                 {row.original.status === 'pending_verification' && (
@@ -149,7 +149,7 @@ export const columns: ColumnDef<TUser>[] = [
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
 
-                        <DropdownMenuItem>View payment details</DropdownMenuItem>
+                        <DropdownMenuItem className="text-destructive">Delete</DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
             );

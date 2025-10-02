@@ -1,12 +1,6 @@
-import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
+import { useGetCoursesQuery } from '@/features/courses/coursesApi';
+import { columns } from './Columns';
+import { flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import {
     Table,
     TableBody,
@@ -15,72 +9,42 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
-import { useUsersQuery } from '@/features/users/userApi';
+import { Label } from '@/components/ui/label';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
+import { Button } from '@/components/ui/button';
 import {
     IconChevronLeft,
     IconChevronRight,
     IconChevronsLeft,
     IconChevronsRight,
 } from '@tabler/icons-react';
-import {
-    flexRender,
-    getCoreRowModel,
-    useReactTable,
-    type ColumnFiltersState,
-    type SortingState,
-    type VisibilityState,
-} from '@tanstack/react-table';
-import React from 'react';
-import { columns } from './Columns';
-export default function UsersTable({
-    searchQuery,
-    sortQuery,
-    sortOrder,
-}: {
-    searchQuery: string;
-    sortQuery: string;
-    sortOrder: string;
-}) {
-    const [sorting, setSorting] = React.useState<SortingState>([]);
-    const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
-    const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
-    const [pagination, setPagination] = React.useState({
-        pageIndex: 0,
-        pageSize: 10,
+
+export const CourseTable = () => {
+    const { data, isLoading } = useGetCoursesQuery(undefined, {
+        refetchOnMountOrArgChange: true,
     });
 
-    const { data, isLoading } = useUsersQuery(
-        {
-            page: pagination.pageIndex + 1, // API expects 1-based
-            limit: pagination.pageSize,
-            search: searchQuery,
-            sortBy: sortQuery,
-            sortOrder,
-        },
-        {
-            refetchOnMountOrArgChange: true,
-        }
-    );
+    console.log(data);
 
     const totalPages = data?.meta?.pagination?.totalPages ?? 0;
     const totalRows = data?.meta?.pagination?.total ?? 0;
 
     const table = useReactTable({
-        data: data?.data || [],
+        data: data?.data ?? [],
         columns,
-        state: {
-            sorting,
-            columnFilters,
-            columnVisibility,
-            pagination,
-        },
         getCoreRowModel: getCoreRowModel(),
         manualPagination: true,
         pageCount: totalPages, // coming from API
-        onSortingChange: setSorting,
-        onColumnFiltersChange: setColumnFilters,
-        onColumnVisibilityChange: setColumnVisibility,
-        onPaginationChange: setPagination,
+        //       onSortingChange: setSorting,
+        //     onColumnFiltersChange: setColumnFilters,
+        //   onColumnVisibilityChange: setColumnVisibility,
+        // onPaginationChange: setPagination,
     });
 
     return (
@@ -113,7 +77,7 @@ export default function UsersTable({
                         table.getRowModel().rows.map(row => (
                             <TableRow key={row.id}>
                                 {row.getVisibleCells().map(cell => (
-                                    <TableCell key={cell.id}>
+                                    <TableCell key={cell.id} className="h-20 p-2">
                                         {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                     </TableCell>
                                 ))}
@@ -203,4 +167,4 @@ export default function UsersTable({
             </div>
         </div>
     );
-}
+};
