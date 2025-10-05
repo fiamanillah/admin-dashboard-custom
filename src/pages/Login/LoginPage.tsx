@@ -1,11 +1,9 @@
-import { LoginForm } from '../components/login-form';
+import { LoginForm } from '@/components/login-form';
 
-function App() {
+export default function LoginPage() {
     return (
         <div className="flex min-h-svh flex-col items-center justify-center">
             <LoginForm />
         </div>
     );
 }
-
-export default App;

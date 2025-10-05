@@ -1,23 +1,24 @@
 // src/app/router.tsx
 import { createBrowserRouter } from 'react-router';
 import { ProtectedRoute } from '@/layout/protected-route';
-import { LoginForm } from '@/components/ui/login-form';
 import Dashboard from '@/pages/Dashboard/Dashboard';
 import DashboardLayout from '@/layout/dashboard-layout';
 import Users from '@/pages/Users/Users';
 import Courses from '@/pages/Course/Courses';
 import Modules from '@/pages/Modules/Modules';
+import LoginPage from '@/pages/Login/LoginPage';
+import ProfileForm from '@/pages/Profile/ProfileForm';
 const router = createBrowserRouter([
     {
         path: '/',
         children: [
             {
                 index: true,
-                element: <LoginForm />,
+                element: <LoginPage />,
             },
             {
                 path: '/login',
-                element: <LoginForm />,
+                element: <LoginPage />,
             },
         ],
     },
@@ -49,6 +50,10 @@ const router = createBrowserRouter([
             {
                 path: 'courses/:courseId/modules',
                 element: <Modules />,
+            },
+            {
+                path: 'profile',
+                element: <ProfileForm />,
             },
 
             {

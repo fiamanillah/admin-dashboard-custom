@@ -115,6 +115,15 @@ export const authApi = createApi({
                 }
             },
         }),
+
+        updateProfile: builder.mutation({
+            query: profile => ({
+                url: '/auth/update-profile',
+                method: 'PATCH',
+                data: profile,
+            }),
+            invalidatesTags: ['Profile'],
+        }),
     }),
 });
 
@@ -125,4 +134,5 @@ export const {
     useRegisterMutation,
     useLogoutMutation,
     useRefreshTokenMutation,
+    useUpdateProfileMutation,
 } = authApi;

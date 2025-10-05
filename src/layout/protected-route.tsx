@@ -8,16 +8,24 @@ interface ProtectedRouteProps {
 }
 
 export const ProtectedRoute = ({ children, requireAuth = true }: ProtectedRouteProps) => {
-    const { isAuthenticated } = useAuth();
+    const { isAuthenticated, isLoading } = useAuth(); // assume your hook provides loading state
     const location = useLocation();
 
+    // While auth status is being checked, optionally render a loader
+    if (isLoading) {
+        return <div>Loading...</div>; // or a spinner component
+    }
+
+    // Redirect if route requires auth and user is not authenticated
     if (requireAuth && !isAuthenticated) {
         return <Navigate to="/login" state={{ from: location }} replace />;
     }
 
+    // Redirect if route is public but user is already authenticated
     if (!requireAuth && isAuthenticated) {
         return <Navigate to="/" replace />;
     }
 
+    // Otherwise, render children
     return <>{children}</>;
 };
