@@ -14,43 +14,45 @@ import { ArrowDownNarrowWide, ArrowUpNarrowWide } from 'lucide-react';
 export default function Users() {
     const [search, setSearch] = useState('');
     const [query, setQuery] = useState('');
-    const [sort, setSort] = useState('createdAt'); // store sort field
-    const [sortOrder, setSortOrder] = useState('asc'); // store sort order
-    const handleSearch = () => {
-        setQuery(search);
-    };
+    const [sort, setSort] = useState('createdAt');
+    const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
 
-    const handleSort = (value: string) => {
-        setSort(value); // update sort state directly
-    };
+    // ✅ Sorting options array
+    const sortOptions = [
+        { value: 'displayName', label: 'Name' },
+        { value: 'email', label: 'Email' },
+        { value: 'createdAt', label: 'Created At' },
+        { value: 'updatedAt', label: 'Updated At' },
+        { value: 'role', label: 'Role' },
+        { value: 'status', label: 'Status' },
+    ];
 
-    const handleSortOrder = () => {
-        setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc'); // toggle sort order
-    };
+    const handleSearch = () => setQuery(search);
+    const handleSort = (value: string) => setSort(value);
+    const handleSortOrder = () => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
 
     return (
         <div className="p-2">
             <header className="flex items-center justify-between mb-2">
-                <div>
-                    <h1 className="text-2xl font-bold">Users</h1>
-                </div>
+                <h1 className="text-2xl font-bold">Users</h1>
                 <div className="flex items-center gap-2">
-                    <Select onValueChange={handleSort}>
+                    <Select onValueChange={handleSort} value={sort}>
                         <SelectTrigger className="w-[180px]">
                             <SelectValue placeholder="Sort By" />
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value="displayName">Name</SelectItem>
-                            <SelectItem value="email">Email</SelectItem>
-                            <SelectItem value="createdAt">Created At</SelectItem>
-                            <SelectItem value="updatedAt">Updated At</SelectItem>
-                            <SelectItem value="role">Role</SelectItem>
-                            <SelectItem value="status">Status</SelectItem>
+                            {sortOptions.map(option => (
+                                <SelectItem key={option.value} value={option.value}>
+                                    {option.label}
+                                </SelectItem>
+                            ))}
                         </SelectContent>
                     </Select>
-                    <Button onClick={handleSortOrder} size={'icon'} variant={'outline'}>
+
+                    <Button onClick={handleSortOrder} size="icon" variant="outline">
                         {sortOrder === 'asc' ? <ArrowUpNarrowWide /> : <ArrowDownNarrowWide />}
                     </Button>
+
                     <Input
                         placeholder="Search..."
                         value={search}
@@ -60,6 +62,7 @@ export default function Users() {
                     <Button onClick={handleSearch}>Search</Button>
                 </div>
             </header>
+
             <UsersTable searchQuery={query} sortQuery={sort} sortOrder={sortOrder} />
         </div>
     );

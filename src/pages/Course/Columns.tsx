@@ -11,8 +11,11 @@ import {
     DropdownMenuItem,
     DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu';
-import { MoreHorizontal } from 'lucide-react';
+import { ChevronDown, MoreHorizontal } from 'lucide-react';
 import { Link } from 'react-router';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import DeleteCourse from './DeleteCourse';
+import EditCourse from './EditCourse';
 
 export const columns: ColumnDef<TCourse>[] = [
     {
@@ -35,19 +38,42 @@ export const columns: ColumnDef<TCourse>[] = [
         accessorKey: 'title',
         header: 'Title',
         cell: ({ row }) => (
-            <p className="font-medium whitespace-pre-wrap truncate w-60 ">
-                {row.original.title.trim()}
-            </p>
+            <EditCourse item={row.original} trigger={<h1>{row.original.title}</h1>} />
         ),
     },
     {
         accessorKey: 'description',
         header: 'Description',
-        cell: ({ row }) => (
-            <ScrollArea className="h-20 w-60 rounded-md border p-2">
-                <p className="text-sm whitespace-pre-wrap">{row.original.description || '—'}</p>
-            </ScrollArea>
-        ),
+        cell: ({ row }) => {
+            const description = row.original.description || '—';
+
+            if (description.length <= 50) {
+                return <p className="whitespace-pre-wrap text-sm">{description}</p>;
+            }
+            return (
+                <Popover>
+                    <PopoverTrigger asChild>
+                        <Button
+                            variant="ghost"
+                            className="h-auto justify-start text-left text-sm p-2"
+                        >
+                            <p className="text-sm flex items-center gap-2">
+                                {description.length > 50
+                                    ? description.slice(0, 30) + '...'
+                                    : description}
+                                <ChevronDown size={16} />
+                            </p>
+                        </Button>
+                    </PopoverTrigger>
+
+                    <PopoverContent className=" p-4" align="start">
+                        <ScrollArea className="max-h-[60vh]">
+                            <p className="whitespace-pre-wrap text-sm">{description}</p>
+                        </ScrollArea>
+                    </PopoverContent>
+                </Popover>
+            );
+        },
     },
     {
         accessorKey: 'difficultyLevel',
@@ -58,8 +84,8 @@ export const columns: ColumnDef<TCourse>[] = [
                 level === 'beginner'
                     ? 'bg-green-500'
                     : level === 'intermediate'
-                      ? 'bg-yellow-500'
-                      : 'bg-red-500';
+                    ? 'bg-yellow-500'
+                    : 'bg-red-500';
             return <Badge className={`${color} text-white capitalize`}>{level}</Badge>;
         },
     },
@@ -134,11 +160,16 @@ export const columns: ColumnDef<TCourse>[] = [
                             Edit
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem
-                            className="text-red-600"
-                            onClick={() => console.log('Delete', course.id)}
-                        >
-                            Delete
+                        <DropdownMenuItem className="text-destructive" asChild>
+                            <DeleteCourse
+                                id={course.id!}
+                                onSuccess={() => console.log('Course deleted successfully')}
+                                trigger={
+                                    <Button className="text-destructive w-full" variant={'ghost'}>
+                                        Delete
+                                    </Button>
+                                }
+                            />
                         </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>

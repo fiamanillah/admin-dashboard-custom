@@ -30,29 +30,20 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
-import { useDeleteUserMutation, useUpdateUserMutation } from '@/features/users/userApi';
+import { useUpdateUserMutation } from '@/features/users/userApi';
 import type z from 'zod';
 import { useEffect, useState } from 'react';
-import { Trash } from 'lucide-react';
-import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-    AlertDialogTrigger,
-} from '@/components/ui/alert-dialog';
+
 import { toast } from 'sonner';
 import { getErrorMessage } from '@/utils/getErrorMessage';
+// import { useGetPublicUploadUrlMutation } from '@/features/content/contentApi';
+import { FileUploadDirectUploadDemo } from '@/components/common/FileUploadDirectUploadDemo';
+import DeleteUser from './DeleteUser';
 function EditUser({ item, trigger }: { item: TUser; trigger: React.ReactNode }) {
     const isMobile = useIsMobile();
     const [open, setOpen] = useState(false);
 
     const [updateUser, { isLoading }] = useUpdateUserMutation();
-    const [deleteUser, { isLoading: isDeleting }] = useDeleteUserMutation();
 
     const form = useForm<z.infer<typeof UsersFormSchema>>({
         resolver: zodResolver(UsersFormSchema),
@@ -109,17 +100,12 @@ function EditUser({ item, trigger }: { item: TUser; trigger: React.ReactNode }) 
         }
     };
 
-    const onDelete = async (e: React.MouseEvent<HTMLButtonElement>) => {
-        e.preventDefault();
-        try {
-            const res = await deleteUser(item.id).unwrap();
-            setOpen(false);
-            toast.success(res.message || 'User deleted successfully');
-            form.reset();
-        } catch (error) {
-            console.error('Failed to delete user:', error);
-            toast.error(getErrorMessage(error));
-        }
+    const handleDeleteSuccess = (message?: string) => {
+        // For example, remove the user from the list
+        console.log('Delete success:', message);
+        setOpen(false);
+        // toast.success(message || 'User deleted successfully');
+        // You can redirect or update the list here
     };
 
     return (
@@ -130,33 +116,7 @@ function EditUser({ item, trigger }: { item: TUser; trigger: React.ReactNode }) 
                     <div className="flex items-center justify-between">
                         <DrawerTitle>{item.displayName}</DrawerTitle>
 
-                        <AlertDialog>
-                            <AlertDialogTrigger asChild>
-                                <Button size={'icon'} variant={'destructive'}>
-                                    <Trash className="h-4 w-4" />
-                                </Button>
-                            </AlertDialogTrigger>
-                            <AlertDialogContent>
-                                <AlertDialogHeader>
-                                    <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                                    <AlertDialogDescription>
-                                        This action cannot be undone. This will permanently delete
-                                        your account and remove your data from our servers.
-                                    </AlertDialogDescription>
-                                </AlertDialogHeader>
-                                <AlertDialogFooter>
-                                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                    <AlertDialogAction
-                                        className="bg-destructive hover:bg-destructive/60"
-                                        onClick={onDelete}
-                                        type="button"
-                                        disabled={isDeleting}
-                                    >
-                                        {isDeleting ? 'Deleting...' : 'Delete'}
-                                    </AlertDialogAction>
-                                </AlertDialogFooter>
-                            </AlertDialogContent>
-                        </AlertDialog>
+                        <DeleteUser id={item.id!} onSuccess={() => handleDeleteSuccess(item.id)} />
                     </div>
                     <DrawerDescription>Edit user details</DrawerDescription>
                 </DrawerHeader>
@@ -311,6 +271,12 @@ function EditUser({ item, trigger }: { item: TUser; trigger: React.ReactNode }) 
                                     </FormItem>
                                 )}
                             />
+                            <FileUploadDirectUploadDemo
+                                onUploaded={url => {
+                                    form.setValue('avatarUrl', url);
+                                    toast.success('Avatar uploaded successfully!');
+                                }}
+                            />
 
                             {/* Instagram URL */}
                             <FormField
@@ -333,6 +299,7 @@ function EditUser({ item, trigger }: { item: TUser; trigger: React.ReactNode }) 
                         </form>
                     </Form>
                 </div>
+
                 <DrawerFooter>
                     <Button
                         type="submit"

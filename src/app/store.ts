@@ -5,6 +5,7 @@ import authReducer from '@/features/auth/authSlice';
 import { userApi } from '@/features/users/userApi';
 import { coursesApi } from '@/features/courses/coursesApi';
 import { modulesApi } from '@/features/modules/modulesApi';
+import { contentApi } from '@/features/content/contentApi';
 
 export const store = configureStore({
     reducer: {
@@ -13,6 +14,7 @@ export const store = configureStore({
         [userApi.reducerPath]: userApi.reducer,
         [coursesApi.reducerPath]: coursesApi.reducer,
         [modulesApi.reducerPath]: modulesApi.reducer,
+        [contentApi.reducerPath]: contentApi.reducer,
     },
     middleware: getDefaultMiddleware =>
         getDefaultMiddleware({
@@ -24,6 +26,7 @@ export const store = configureStore({
             userApi.middleware,
             coursesApi.middleware,
             modulesApi.middleware,
+            contentApi.middleware,
         ]),
 });
 

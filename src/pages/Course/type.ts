@@ -1,19 +1,19 @@
 import { z } from 'zod';
 
 export const CourseSchema = z.object({
-    id: z.uuid(),
-    title: z.string(),
-    slug: z.string(),
+    id: z.string().uuid(),
+    title: z.string().min(1, 'Title is required'),
+    slug: z.string().min(1, 'Slug is required'),
     subtitle: z.string().nullable().optional(),
     description: z.string().nullable().optional(),
     shortDescription: z.string().nullable().optional(),
-    thumbnailUrl: z.url().nullable().optional(),
-    previewVideoUrl: z.url().nullable().optional(),
-    difficultyLevel: z.enum(['beginner', 'intermediate', 'advanced']).default('beginner'),
+    thumbnailUrl: z.string().url().nullable().optional().or(z.literal('')),
+    previewVideoUrl: z.string().url().nullable().optional().or(z.literal('')),
+    difficultyLevel: z.enum(['beginner', 'intermediate', 'advanced']),
     estimatedDurationHours: z.number().nullable().optional(),
-    basePrice: z.number().default(0),
-    discount: z.number().nullable().optional().default(0),
-    discountedPrice: z.number().nullable().optional().default(0),
+    basePrice: z.coerce.number().default(0),
+    discount: z.coerce.number().nullable().default(0),
+    discountedPrice: z.number().nullable().default(0),
     hasFinalQuiz: z.boolean().default(false),
     passPercentage: z.number().default(70),
     hasCertificate: z.boolean().default(false),
@@ -21,8 +21,8 @@ export const CourseSchema = z.object({
     publishedAt: z.date().nullable().optional(),
     isDeleted: z.boolean().default(false),
     deletedAt: z.date().nullable().optional(),
-    createdAt: z.date().default(new Date()),
-    updatedAt: z.date().default(new Date()),
+    createdAt: z.date().optional(),
+    updatedAt: z.date().optional(),
     // relations as arrays or objects
     enrollments: z.array(z.any()).optional(),
     coursePlans: z.array(z.any()).optional(),
@@ -34,3 +34,33 @@ export const CourseSchema = z.object({
 });
 
 export type TCourse = z.infer<typeof CourseSchema>;
+
+// Schema for editing - makes most fields optional except critical ones
+export const CourseEditSchema = z.object({
+    title: z.string().min(5, 'Title must be at least 5 characters').optional(),
+    description: z.string().min(10, 'Description must be at least 10 characters').optional(),
+    shortDescription: z.string().optional(),
+    thumbnailUrl: z.string().url('Invalid thumbnail URL').optional(),
+    difficultyLevel: z.enum(['beginner', 'intermediate', 'advanced']).optional(),
+    basePrice: z.number().min(0, 'Base price must be non-negative').optional(),
+    discount: z.number().min(0).max(100, 'Discount must be between 0-100%').optional(),
+    hasFinalQuiz: z.boolean().optional(),
+    passPercentage: z.number().min(0).max(100).optional(),
+    hasCertificate: z.boolean().optional(),
+    isPublished: z.boolean().optional(),
+});
+
+export const Coursecreate = z.object({
+    title: z.string().min(5, 'Title must be at least 5 characters'),
+    description: z.string().min(10, 'Description must be at least 10 characters'),
+    shortDescription: z.string().optional(),
+    thumbnailUrl: z.string().url('Invalid thumbnail URL').optional(),
+    previewVideoUrl: z.string().url('Invalid preview video URL').optional(),
+    difficultyLevel: z.enum(['beginner', 'intermediate', 'advanced']).default('beginner'),
+    basePrice: z.number().min(0, 'Base price must be non-negative'),
+    discount: z.number().min(0, 'Discount must be non-negative').optional(),
+    hasFinalQuiz: z.boolean().default(false),
+    passPercentage: z.number().min(0).max(100).default(70),
+    hasCertificate: z.boolean().default(false),
+    isPublished: z.boolean().default(false),
+});

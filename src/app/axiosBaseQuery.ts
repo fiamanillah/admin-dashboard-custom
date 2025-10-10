@@ -1,5 +1,5 @@
 // src/app/axiosBaseQuery.ts
-import axios, { type AxiosRequestConfig, AxiosError } from 'axios';
+import axios, { type AxiosProgressEvent, type AxiosRequestConfig, AxiosError } from 'axios';
 import { type BaseQueryFn } from '@reduxjs/toolkit/query/react';
 
 const axiosInstance = axios.create({
@@ -32,18 +32,18 @@ axiosInstance.interceptors.response.use(
         return Promise.reject(error);
     }
 );
-
-interface AxiosRequest {
+export interface AxiosRequest<TData = unknown> {
     url: string;
     method: AxiosRequestConfig['method'];
-    data?: Record<string, unknown>;
+    data?: TData | FormData | File;
     params?: Record<string, unknown>;
     headers?: Record<string, string>;
+    onUploadProgress?: (progressEvent: AxiosProgressEvent) => void;
 }
 
 export const axiosBaseQuery =
-    (): BaseQueryFn<AxiosRequest, unknown, unknown> =>
-    async ({ url, method, data, params, headers }) => {
+    <TData = unknown>(): BaseQueryFn<AxiosRequest<TData>, unknown, unknown> =>
+    async ({ url, method, data, params, headers, onUploadProgress }) => {
         try {
             const result = await axiosInstance({
                 url,
@@ -51,14 +51,15 @@ export const axiosBaseQuery =
                 data,
                 params,
                 headers,
+                onUploadProgress,
             });
-            return { data: result.data };
-        } catch (axiosError) {
-            const err = axiosError as AxiosError;
+            return { data: result.data as TData };
+        } catch (err) {
+            const error = err as AxiosError;
             return {
                 error: {
-                    status: err.response?.status,
-                    data: err.response?.data || err.message,
+                    status: error.response?.status,
+                    data: error.response?.data || error.message,
                 },
             };
         }

@@ -10,11 +10,15 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
-import { LinkIcon, Loader, MoreHorizontal } from 'lucide-react';
+import { ChevronDown, LinkIcon, Loader, MoreHorizontal } from 'lucide-react';
 import EditUser from './EditUser';
 import type { TUser } from './type';
 import { Badge } from '@/components/ui/badge';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import DeleteUser from './DeleteUser';
+import { toast } from 'sonner';
+
 export const columns: ColumnDef<TUser>[] = [
     {
         id: 'avatarUrl',
@@ -77,8 +81,8 @@ export const columns: ColumnDef<TUser>[] = [
                     row.original.status === 'active'
                         ? 'bg-chart-2'
                         : row.original.status === 'pending_verification'
-                          ? 'bg-destructive'
-                          : 'bg-chart-4'
+                        ? 'bg-destructive'
+                        : 'bg-chart-4'
                 }`}
             >
                 {row.original.status === 'pending_verification' && (
@@ -113,16 +117,31 @@ export const columns: ColumnDef<TUser>[] = [
         accessorKey: 'bio',
         header: 'Bio',
         cell: ({ row }) => {
+            const bio = row.original.bio || '—';
+
+            if (bio.length < 50) {
+                return <span className="truncate ">{bio}</span>;
+            }
+
             return (
                 <Popover>
-                    <PopoverTrigger className="flex items-center ">
-                        <Badge className={`${row.original.bio ? 'bg-chart-2' : 'bg-chart-4'}`}>
-                            {row.original.bio
-                                ? row.original.bio?.trim().slice(0, 20) + '...'
-                                : 'No bio'}
-                        </Badge>
+                    <PopoverTrigger asChild>
+                        <Button
+                            variant="ghost"
+                            className="h-auto justify-start text-left text-sm p-2"
+                        >
+                            <p className="text-sm flex items-center gap-2">
+                                {bio.length > 50 ? bio.slice(0, 30) + '...' : bio}
+                                <ChevronDown size={16} />
+                            </p>
+                        </Button>
                     </PopoverTrigger>
-                    <PopoverContent>{row.original.bio}</PopoverContent>
+
+                    <PopoverContent className=" p-4" align="start">
+                        <ScrollArea className="max-h-[60vh]">
+                            <p className="whitespace-pre-wrap text-sm">{bio}</p>
+                        </ScrollArea>
+                    </PopoverContent>
                 </Popover>
             );
         },
@@ -149,7 +168,17 @@ export const columns: ColumnDef<TUser>[] = [
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
 
-                        <DropdownMenuItem className="text-destructive">Delete</DropdownMenuItem>
+                        <DropdownMenuItem className="text-destructive" asChild>
+                            <DeleteUser
+                                id={user.id!}
+                                onSuccess={() => toast.success('User deleted')}
+                                trigger={
+                                    <Button className="text-destructive w-full" variant={'ghost'}>
+                                        Delete
+                                    </Button>
+                                }
+                            />
+                        </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
             );
