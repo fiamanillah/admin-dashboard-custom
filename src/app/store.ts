@@ -6,6 +6,8 @@ import { userApi } from '@/features/users/userApi';
 import { coursesApi } from '@/features/courses/coursesApi';
 import { modulesApi } from '@/features/modules/modulesApi';
 import { contentApi } from '@/features/content/contentApi';
+import { coursePlanApi } from '@/features/coursePlan/coursePlanApi';
+import { lessonsApi } from '@/features/lessons/lessonsApi';
 
 export const store = configureStore({
     reducer: {
@@ -15,6 +17,8 @@ export const store = configureStore({
         [coursesApi.reducerPath]: coursesApi.reducer,
         [modulesApi.reducerPath]: modulesApi.reducer,
         [contentApi.reducerPath]: contentApi.reducer,
+        [coursePlanApi.reducerPath]: coursePlanApi.reducer,
+        [lessonsApi.reducerPath]: lessonsApi.reducer,
     },
     middleware: getDefaultMiddleware =>
         getDefaultMiddleware({
@@ -27,6 +31,8 @@ export const store = configureStore({
             coursesApi.middleware,
             modulesApi.middleware,
             contentApi.middleware,
+            coursePlanApi.middleware,
+            lessonsApi.middleware,
         ]),
 });
 

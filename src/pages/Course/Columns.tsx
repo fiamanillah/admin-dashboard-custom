@@ -24,13 +24,18 @@ export const columns: ColumnDef<TCourse>[] = [
         cell: ({ row }) => {
             const thumbnail = row.original.thumbnailUrl;
             return (
-                <div className="aspect-video h-20 w-32 overflow-hidden rounded-lg border">
-                    <img
-                        src={thumbnail || 'https://placehold.co/300x200?text=No+Image'}
-                        alt={row.original.title}
-                        className="h-full w-full object-cover"
-                    />
-                </div>
+                <EditCourse
+                    item={row.original}
+                    trigger={
+                        <div className="aspect-video h-20 w-32 overflow-hidden rounded-lg border">
+                            <img
+                                src={thumbnail || 'https://placehold.co/300x200?text=No+Image'}
+                                alt={row.original.title}
+                                className="h-full w-full object-cover"
+                            />
+                        </div>
+                    }
+                />
             );
         },
     },
@@ -133,6 +138,21 @@ export const columns: ColumnDef<TCourse>[] = [
                 <Link to={`/dashboard/courses/${courseId}/modules`}>
                     <Button variant="link" className="p-0 h-auto font-medium">
                         {modules.length} {modules.length === 1 ? 'Module' : 'Modules'}
+                    </Button>
+                </Link>
+            );
+        },
+    },
+    {
+        accessorKey: 'coursePlans',
+        header: 'Plans',
+        cell: ({ row }) => {
+            const coursePlans = row.original.coursePlans ?? [];
+            const courseId = row.original.id;
+            return (
+                <Link to={`/dashboard/courses/${courseId}/plans`}>
+                    <Button variant="link" className="p-0 h-auto font-medium">
+                        {coursePlans.length} {coursePlans.length === 1 ? 'Plan' : 'Plans'}
                     </Button>
                 </Link>
             );

@@ -14,7 +14,43 @@ export const modulesApi = createApi({
             }),
             providesTags: ['Modules'],
         }),
+        getModule: builder.query({
+            query: id => ({
+                url: `/modules/${id}`,
+                method: 'GET',
+            }),
+            providesTags: ['Modules'],
+        }),
+        updateModule: builder.mutation({
+            query: ({ id, data }) => ({
+                url: `/modules/${id}`,
+                method: 'PATCH',
+                data,
+            }),
+            invalidatesTags: ['Modules'],
+        }),
+        deleteModule: builder.mutation({
+            query: id => ({
+                url: `/modules/${id}`,
+                method: 'DELETE',
+            }),
+            invalidatesTags: ['Modules'],
+        }),
+        createModule: builder.mutation({
+            query: data => ({
+                url: '/modules',
+                method: 'POST',
+                data,
+            }),
+            invalidatesTags: ['Modules'],
+        }),
     }),
 });
 
-export const { useGetModulesQuery } = modulesApi;
+export const {
+    useGetModulesQuery,
+    useGetModuleQuery,
+    useUpdateModuleMutation,
+    useDeleteModuleMutation,
+    useCreateModuleMutation,
+} = modulesApi;

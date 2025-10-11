@@ -5,9 +5,11 @@ import Dashboard from '@/pages/Dashboard/Dashboard';
 import DashboardLayout from '@/layout/dashboard-layout';
 import Users from '@/pages/Users/Users';
 import Courses from '@/pages/Course/Courses';
-import Modules from '@/pages/Modules/Modules';
 import LoginPage from '@/pages/Login/LoginPage';
 import ProfileForm from '@/pages/Profile/ProfileForm';
+import CoursePlan from '@/pages/CoursePlan/CoursePlan';
+import Modules from '@/pages/Modules/Modules';
+import Lessons from '@/pages/Lessons/Lessons';
 const router = createBrowserRouter([
     {
         path: '/',
@@ -50,6 +52,14 @@ const router = createBrowserRouter([
             {
                 path: 'courses/:courseId/modules',
                 element: <Modules />,
+            },
+            {
+                path: 'courses/:courseId/plans',
+                element: <CoursePlan />,
+            },
+            {
+                path: 'courses/:courseId/modules/:moduleId/lessons',
+                element: <Lessons />,
             },
             {
                 path: 'profile',

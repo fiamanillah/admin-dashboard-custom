@@ -20,8 +20,6 @@ import {
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
 
-import { cn } from '@/lib/utils';
-
 const data = {
     user: {
         name: 'shadcn',
@@ -81,7 +79,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 {/* <NavSecondary items={data.navSecondary} className="mt-auto" /> */}
             </SidebarContent>
             <SidebarFooter>
-                <NavUser user={data.user} />
+                <NavUser />
             </SidebarFooter>
         </Sidebar>
     );

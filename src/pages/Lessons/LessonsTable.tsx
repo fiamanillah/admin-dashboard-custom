@@ -2,9 +2,9 @@ import React from 'react';
 import { DataTable } from '../DataTable';
 import { useParams } from 'react-router';
 import { columns } from './Columns';
-import { useGetModulesQuery } from '@/features/modules/modulesApi';
+import { useGetLessonsQuery } from '@/features/lessons/lessonsApi';
 
-export function ModulesTable({
+export function LessonsTable({
     searchQuery,
     sortQuery,
     sortOrder,
@@ -13,18 +13,18 @@ export function ModulesTable({
     sortQuery: string;
     sortOrder: string;
 }) {
-    const { courseId } = useParams();
+    const { moduleId } = useParams();
     const [pagination, setPagination] = React.useState({
         pageIndex: 0,
         pageSize: 10,
     });
 
-    const { data, isLoading } = useGetModulesQuery({
+    const { data, isLoading } = useGetLessonsQuery({
         page: pagination.pageIndex + 1,
         limit: pagination.pageSize,
         search: searchQuery,
         sortBy: sortQuery,
-        courseId,
+        moduleId,
         sortOrder,
     });
 

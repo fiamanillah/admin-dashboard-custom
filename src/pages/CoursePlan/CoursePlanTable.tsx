@@ -1,10 +1,10 @@
 import React from 'react';
-import { DataTable } from '../DataTable';
-import { useParams } from 'react-router';
 import { columns } from './Columns';
-import { useGetModulesQuery } from '@/features/modules/modulesApi';
+import { DataTable } from '../DataTable';
+import { useGetCoursePlansQuery } from '@/features/coursePlan/coursePlanApi';
+import { useParams } from 'react-router';
 
-export function ModulesTable({
+export function CoursePlanTable({
     searchQuery,
     sortQuery,
     sortOrder,
@@ -19,7 +19,7 @@ export function ModulesTable({
         pageSize: 10,
     });
 
-    const { data, isLoading } = useGetModulesQuery({
+    const { data, isLoading } = useGetCoursePlansQuery({
         page: pagination.pageIndex + 1,
         limit: pagination.pageSize,
         search: searchQuery,

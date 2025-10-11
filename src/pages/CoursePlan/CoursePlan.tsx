@@ -9,10 +9,10 @@ import {
 import { Button } from '@/components/ui/button';
 import { ArrowDownNarrowWide, ArrowUpNarrowWide } from 'lucide-react';
 import { Input } from '@/components/ui/input';
-import { ModulesTable } from './ModulesTable';
-import CreateModule from './CreateModule';
+import { CoursePlanTable } from './CoursePlanTable';
+import CreateCoursePlan from './CreateCoursePlan';
 
-export default function Modules() {
+export default function CoursePlan() {
     const [search, setSearch] = useState('');
     const [query, setQuery] = useState('');
     const [sort, setSort] = useState('createdAt');
@@ -65,11 +65,11 @@ export default function Modules() {
                         onKeyDown={e => e.key === 'Enter' && handleSearch()}
                     />
                     <Button onClick={handleSearch}>Search</Button>
-                    <CreateModule trigger={<Button>Create Course</Button>} />
+                    <CreateCoursePlan trigger={<Button>Create Course</Button>} />
                 </div>
             </header>
 
-            <ModulesTable searchQuery={query} sortQuery={sort} sortOrder={sortOrder} />
+            <CoursePlanTable searchQuery={query} sortQuery={sort} sortOrder={sortOrder} />
         </div>
     );
 }
