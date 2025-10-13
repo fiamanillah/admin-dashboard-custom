@@ -6,6 +6,7 @@ import { ChevronDown } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { formatDate } from '@/utils/formatDate';
 import { Link } from 'react-router';
+import EditModule from './EditModule';
 
 export const columns: ColumnDef<TModule>[] = [
     {
@@ -13,11 +14,7 @@ export const columns: ColumnDef<TModule>[] = [
         header: 'Title',
         accessorKey: 'title',
         cell: ({ row }) => {
-            return (
-                <div className="flex items-center gap-2">
-                    <div className="font-medium leading-none">{row.original.title}</div>
-                </div>
-            );
+            return <EditModule item={row.original} trigger={<span>{row.original.title}</span>} />;
         },
     },
     {

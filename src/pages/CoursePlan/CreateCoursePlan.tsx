@@ -232,7 +232,7 @@ function CreateCoursePlan({ trigger }: { trigger: React.ReactNode }) {
                                 name="discount"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Discount (%)</FormLabel>
+                                        <FormLabel>Discount</FormLabel>
                                         <FormControl>
                                             <Input
                                                 placeholder="0-100"

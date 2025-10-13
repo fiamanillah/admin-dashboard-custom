@@ -1,5 +1,3 @@
-'use client';
-
 import { Button } from '@/components/ui/button';
 import {
     Drawer,
@@ -23,40 +21,53 @@ import {
     FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { Checkbox } from '@/components/ui/checkbox';
 
 import { Textarea } from '@/components/ui/textarea';
+import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { getErrorMessage } from '@/utils/getErrorMessage';
-import { useState } from 'react';
-import type z from 'zod';
-import { useParams } from 'react-router';
-import { ModuleSchema } from './type';
-import { Checkbox } from '@/components/ui/checkbox';
-import { useCreateModuleMutation } from '@/features/modules/modulesApi';
+import z from 'zod';
+import { ModuleSchema, type TModule } from './type';
+import { useUpdateModuleMutation } from '@/features/modules/modulesApi';
+import DeleteModule from './DeleteModule';
 
-function CreateModule({ trigger }: { trigger: React.ReactNode }) {
-    const { courseId } = useParams();
+type ModuleFormData = z.infer<typeof ModuleSchema>;
+
+function EditModule({ item, trigger }: { item: TModule; trigger: React.ReactNode }) {
     const isMobile = useIsMobile();
     const [open, setOpen] = useState(false);
-    const [createCoursePlan, { isLoading }] = useCreateModuleMutation();
 
-    const form = useForm<z.infer<typeof ModuleSchema>>({
+    const [updateCoursePlan, { isLoading }] = useUpdateModuleMutation();
+
+    const form = useForm<ModuleFormData>({
         resolver: zodResolver(ModuleSchema),
         defaultValues: {
-            courseId: courseId || '',
             title: '',
             description: '',
+            isPublished: false,
         },
     });
 
-    const onSubmit = async (data: z.infer<typeof ModuleSchema>) => {
+    useEffect(() => {
+        if (open && item) {
+            form.reset({
+                title: item.title || '',
+                description: item.description || '',
+                isPublished: item.isPublished || false,
+            });
+        }
+    }, [open, item, form]);
+
+    // console.log(item);
+
+    const onSubmit = async (data: ModuleFormData) => {
         try {
-            const res = await createCoursePlan(data).unwrap();
-            toast.success(res.message || 'Course plan created successfully');
-            form.reset();
+            const res = await updateCoursePlan({ id: item.id, data }).unwrap();
             setOpen(false);
+            toast.success(res.message || 'Course plan updated successfully');
         } catch (error) {
-            console.error('Failed to create course plan:', error);
+            console.error('Failed to update course plan:', error);
             toast.error(getErrorMessage(error));
         }
     };
@@ -65,11 +76,12 @@ function CreateModule({ trigger }: { trigger: React.ReactNode }) {
         <Drawer direction={isMobile ? 'bottom' : 'right'} open={open} onOpenChange={setOpen}>
             <DrawerTrigger asChild>{trigger}</DrawerTrigger>
             <DrawerContent className={isMobile ? 'max-h-[90vh]' : 'h-screen'}>
-                <DrawerHeader>
-                    <DrawerTitle>Create New Module</DrawerTitle>
-                    <DrawerDescription>
-                        Fill in the details below to create a new module.
-                    </DrawerDescription>
+                <DrawerHeader className="gap-1">
+                    <div className="flex items-center justify-between">
+                        <DrawerTitle>{item.title}</DrawerTitle>
+                        <DeleteModule id={item.id} onSuccess={() => setOpen(false)} />
+                    </div>
+                    <DrawerDescription>Edit course module details</DrawerDescription>
                 </DrawerHeader>
 
                 <div className="flex-1 overflow-y-auto px-4">
@@ -138,7 +150,7 @@ function CreateModule({ trigger }: { trigger: React.ReactNode }) {
                         className="w-full"
                         onClick={form.handleSubmit(onSubmit)}
                     >
-                        {isLoading ? 'Creating...' : 'Create Course Module'}
+                        {isLoading ? 'Saving...' : 'Update Course Module'}
                     </Button>
                     <DrawerClose asChild>
                         <Button variant="outline" type="button">
@@ -151,4 +163,4 @@ function CreateModule({ trigger }: { trigger: React.ReactNode }) {
     );
 }
 
-export default CreateModule;
+export default EditModule;

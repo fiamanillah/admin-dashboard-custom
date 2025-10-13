@@ -65,7 +65,7 @@ export default function CoursePlan() {
                         onKeyDown={e => e.key === 'Enter' && handleSearch()}
                     />
                     <Button onClick={handleSearch}>Search</Button>
-                    <CreateCoursePlan trigger={<Button>Create Course</Button>} />
+                    <CreateCoursePlan trigger={<Button>Create Course Plan</Button>} />
                 </div>
             </header>
 

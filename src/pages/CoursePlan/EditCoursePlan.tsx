@@ -258,7 +258,7 @@ function EditCoursePlan({ item, trigger }: { item: TCoursePlan; trigger: React.R
                                 name="discount"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Discount (%)</FormLabel>
+                                        <FormLabel>Discount </FormLabel>
                                         <FormControl>
                                             <Input
                                                 placeholder="0-100"

@@ -15,7 +15,7 @@ export default function Users() {
     const [search, setSearch] = useState('');
     const [query, setQuery] = useState('');
     const [sort, setSort] = useState('createdAt');
-    const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
+    const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 
     // ✅ Sorting options array
     const sortOptions = [

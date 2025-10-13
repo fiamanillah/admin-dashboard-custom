@@ -20,7 +20,7 @@ export type TModule = {
 };
 
 export const ModuleSchema = z.object({
-    courseId: z.string().uuid(), // courseId is required
+    courseId: z.string().uuid().optional(), // courseId is required
     title: z.string().min(1), // title is required
     description: z.string().optional(), // optional description
     isPublished: z.boolean(), // isPublished is required

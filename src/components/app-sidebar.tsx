@@ -3,7 +3,6 @@ import {
     IconChartBar,
     IconDashboard,
     IconFolder,
-    IconInnerShadowTop,
     IconListDetails,
     IconUsers,
 } from '@tabler/icons-react';
@@ -19,6 +18,7 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
+import { Link } from 'react-router';
 
 const data = {
     user: {
@@ -65,10 +65,16 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                             asChild
                             className="data-[slot=sidebar-menu-button]:!p-1.5"
                         >
-                            <a href="#">
-                                <IconInnerShadowTop className="!size-5" />
-                                <span className="text-base font-semibold">Acme Inc.</span>
-                            </a>
+                            <Link to="#">
+                                <img
+                                    src="/logo.png"
+                                    alt="The Recident Creator"
+                                    className="size-6"
+                                />
+                                <span className="text-base font-semibold">
+                                    The Recident Creator
+                                </span>
+                            </Link>
                         </SidebarMenuButton>
                     </SidebarMenuItem>
                 </SidebarMenu>

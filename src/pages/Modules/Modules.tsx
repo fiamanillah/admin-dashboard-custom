@@ -22,10 +22,7 @@ export default function Modules() {
     const sortOptions = [
         { value: 'id', label: 'ID' },
         { value: 'title', label: 'Title' },
-        { value: 'price', label: 'Price' },
-        { value: 'originalPrice', label: 'Original Price' },
-        { value: 'accessDurationDays', label: 'accessDurationDays' },
-        { value: 'isActive', label: 'Active' },
+        { value: 'isPublished', label: 'Published' },
         { value: 'createdAt', label: 'Created At' },
         { value: 'updatedAt', label: 'Updated At' },
     ];
@@ -65,7 +62,7 @@ export default function Modules() {
                         onKeyDown={e => e.key === 'Enter' && handleSearch()}
                     />
                     <Button onClick={handleSearch}>Search</Button>
-                    <CreateModule trigger={<Button>Create Course</Button>} />
+                    <CreateModule trigger={<Button>Create Module</Button>} />
                 </div>
             </header>
 

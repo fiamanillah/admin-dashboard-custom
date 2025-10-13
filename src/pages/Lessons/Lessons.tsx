@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import { ArrowDownNarrowWide, ArrowUpNarrowWide } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { LessonsTable } from './LessonsTable';
+import CreateLesson from './CreateLesson';
 
 export default function Lessons() {
     const [search, setSearch] = useState('');
@@ -64,7 +65,7 @@ export default function Lessons() {
                         onKeyDown={e => e.key === 'Enter' && handleSearch()}
                     />
                     <Button onClick={handleSearch}>Search</Button>
-                    {/* <CreateCoursePlan trigger={<Button>Create Course</Button>} /> */}
+                    <CreateLesson trigger={<Button>Create Lesson</Button>} />
                 </div>
             </header>
 

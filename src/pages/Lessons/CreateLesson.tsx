@@ -30,29 +30,44 @@ import { getErrorMessage } from '@/utils/getErrorMessage';
 import { useState } from 'react';
 import type z from 'zod';
 import { useParams } from 'react-router';
-import { ModuleSchema } from './type';
+import { LessonSchema } from './type';
 import { Checkbox } from '@/components/ui/checkbox';
-import { useCreateModuleMutation } from '@/features/modules/modulesApi';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
+import { useCreateLessonMutation } from '@/features/lessons/lessonsApi';
+import { FileUploadDirectUploadDemo } from '@/components/common/FileUploadDirectUploadDemo';
 
-function CreateModule({ trigger }: { trigger: React.ReactNode }) {
-    const { courseId } = useParams();
+function CreateLesson({ trigger }: { trigger: React.ReactNode }) {
+    const { moduleId } = useParams();
     const isMobile = useIsMobile();
     const [open, setOpen] = useState(false);
-    const [createCoursePlan, { isLoading }] = useCreateModuleMutation();
+    const [createCourseLesson, { isLoading }] = useCreateLessonMutation();
+    console.log(moduleId);
 
-    const form = useForm<z.infer<typeof ModuleSchema>>({
-        resolver: zodResolver(ModuleSchema),
+    const form = useForm<z.infer<typeof LessonSchema>>({
+        resolver: zodResolver(LessonSchema),
         defaultValues: {
-            courseId: courseId || '',
-            title: '',
-            description: '',
+            moduleId: moduleId || '',
+            contentData: {
+                url: '',
+                key: '',
+            },
+            isPublished: false,
+            isPreview: false,
+            requiredPlanLevel: 1,
+            estimatedDurationMinutes: 0,
         },
     });
 
-    const onSubmit = async (data: z.infer<typeof ModuleSchema>) => {
+    const onSubmit = async (data: z.infer<typeof LessonSchema>) => {
         try {
-            const res = await createCoursePlan(data).unwrap();
-            toast.success(res.message || 'Course plan created successfully');
+            const res = await createCourseLesson(data).unwrap();
+            toast.success(res.message || 'Course Lesson created successfully');
             form.reset();
             setOpen(false);
         } catch (error) {
@@ -127,6 +142,81 @@ function CreateModule({ trigger }: { trigger: React.ReactNode }) {
                                     </FormItem>
                                 )}
                             />
+
+                            {/* contentType */}
+                            <FormField
+                                control={form.control}
+                                name="contentType"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Content Type *</FormLabel>
+                                        <Select
+                                            onValueChange={field.onChange}
+                                            defaultValue={field.value}
+                                        >
+                                            <FormControl>
+                                                <SelectTrigger className="w-full">
+                                                    <SelectValue placeholder="Select content Type" />
+                                                </SelectTrigger>
+                                            </FormControl>
+                                            <SelectContent>
+                                                <SelectItem value="video">Video</SelectItem>
+                                                <SelectItem value="article">Article</SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+                            {/* Estimated Time */}
+                            <FormField
+                                control={form.control}
+                                name="estimatedDurationMinutes"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Duration *</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                type="number"
+                                                placeholder="99.99"
+                                                {...field}
+                                                value={field.value || 0}
+                                                onChange={e =>
+                                                    field.onChange(e.target.valueAsNumber || 0)
+                                                }
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+                            {/* Content Url */}
+                            <FormField
+                                control={form.control}
+                                name="contentData.key"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Content Key *</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                placeholder="https://example.com/video"
+                                                {...field}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+                            {/* Upload File */}
+                            <FileUploadDirectUploadDemo
+                                getKey={key => {
+                                    form.setValue('contentData.key', key);
+                                    toast.success('Content uploaded successfully!');
+                                }}
+                            />
                         </form>
                     </Form>
                 </div>
@@ -151,4 +241,4 @@ function CreateModule({ trigger }: { trigger: React.ReactNode }) {
     );
 }
 
-export default CreateModule;
+export default CreateLesson;

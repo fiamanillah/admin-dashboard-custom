@@ -23,9 +23,11 @@ import {
 
 export function FileUploadDirectUploadDemo({
     onUploaded,
+    getKey,
     maxFiles = 1, // default to 2 if not provided
 }: {
     onUploaded?: (url: string) => void;
+    getKey?: (key: string) => void;
     maxFiles?: number;
 }) {
     const [files, setFiles] = React.useState<File[]>([]);
@@ -56,6 +58,8 @@ export function FileUploadDirectUploadDemo({
                         // ✅ Call parent callback with final public URL
                         if (onUploaded && res.data.url) onUploaded(res.data.url);
 
+                        if (getKey && res.data.key) getKey(res.data.key);
+
                         // toast.success(`✅ Uploaded: ${file.name}`);
                         onSuccess(file);
                     } catch (error) {
@@ -70,7 +74,7 @@ export function FileUploadDirectUploadDemo({
                 console.error('Unexpected upload error:', error);
             }
         },
-        [getPublicUploadUrl, uploadToS3, onUploaded]
+        [getPublicUploadUrl, uploadToS3, onUploaded, getKey]
     );
 
     const onFileReject = React.useCallback((file: File, message: string) => {
@@ -89,7 +93,7 @@ export function FileUploadDirectUploadDemo({
             onFileReject={onFileReject}
             maxFiles={maxFiles}
             multiple
-            className="w-full max-w-md"
+            className="w-full max-w-lg"
         >
             <FileUploadDropzone>
                 <div className="flex flex-col items-center gap-1 text-center">
