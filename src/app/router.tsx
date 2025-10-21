@@ -10,6 +10,7 @@ import ProfileForm from '@/pages/Profile/ProfileForm';
 import CoursePlan from '@/pages/CoursePlan/CoursePlan';
 import Modules from '@/pages/Modules/Modules';
 import Lessons from '@/pages/Lessons/Lessons';
+import Quizes from '@/pages/Quizes/Quizes';
 const router = createBrowserRouter([
     {
         path: '/',
@@ -64,6 +65,10 @@ const router = createBrowserRouter([
             {
                 path: 'profile',
                 element: <ProfileForm />,
+            },
+            {
+                path: 'courses/:courseId/quizes',
+                element: <Quizes />,
             },
 
             {

@@ -159,6 +159,20 @@ export const columns: ColumnDef<TCourse>[] = [
         },
     },
     {
+        accessorKey: 'hasFinalQuiz',
+        header: 'Final Quiz',
+        cell: ({ row }) => {
+            const hasFinalQuiz = row.original.hasFinalQuiz;
+            return (
+                <Link to={`/dashboard/courses/${row.original.id}/quizes`}>
+                    <Badge className={`${hasFinalQuiz ? 'bg-green-500' : 'bg-red-500'}`}>
+                        {hasFinalQuiz ? 'Yes' : 'No'}
+                    </Badge>
+                </Link>
+            );
+        },
+    },
+    {
         id: 'actions',
         header: '',
         cell: ({ row }) => {

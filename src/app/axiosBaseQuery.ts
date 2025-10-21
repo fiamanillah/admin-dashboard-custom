@@ -38,6 +38,7 @@ export interface AxiosRequest<TData = unknown> {
     data?: TData | FormData | File;
     params?: Record<string, unknown>;
     headers?: Record<string, string>;
+
     onUploadProgress?: (progressEvent: AxiosProgressEvent) => void;
 }
 
