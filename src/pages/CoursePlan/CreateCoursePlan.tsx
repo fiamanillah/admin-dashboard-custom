@@ -270,33 +270,67 @@ function CreateCoursePlan({ trigger }: { trigger: React.ReactNode }) {
                                 )}
                             />
 
-                            {/* Content Access */}
-                            <FormField
-                                control={form.control}
-                                name="contentAccess"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Content Access *</FormLabel>
-                                        <Select
-                                            onValueChange={field.onChange}
-                                            defaultValue={field.value}
-                                        >
-                                            <FormControl>
-                                                <SelectTrigger>
-                                                    <SelectValue placeholder="Select content access" />
-                                                </SelectTrigger>
-                                            </FormControl>
-                                            <SelectContent>
-                                                <SelectItem value="Full">Full Access</SelectItem>
-                                                <SelectItem value="Partial">
-                                                    Partial Access
-                                                </SelectItem>
-                                            </SelectContent>
-                                        </Select>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
+                            <div className="flex justify-between gap-2">
+                                {/* Content Access */}
+                                <FormField
+                                    control={form.control}
+                                    name="contentAccess"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Content Access *</FormLabel>
+                                            <Select
+                                                onValueChange={field.onChange}
+                                                value={field.value}
+                                            >
+                                                <FormControl>
+                                                    <SelectTrigger>
+                                                        <SelectValue placeholder="Select content access" />
+                                                    </SelectTrigger>
+                                                </FormControl>
+                                                <SelectContent>
+                                                    <SelectItem value="Full">
+                                                        Full Access
+                                                    </SelectItem>
+                                                    <SelectItem value="Partial">
+                                                        Partial Access
+                                                    </SelectItem>
+                                                </SelectContent>
+                                            </Select>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                {/* Certificate Type */}
+                                <FormField
+                                    control={form.control}
+                                    name="certificateType"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Certificate Type *</FormLabel>
+                                            <Select
+                                                onValueChange={field.onChange}
+                                                value={field.value}
+                                            >
+                                                <FormControl>
+                                                    <SelectTrigger>
+                                                        <SelectValue placeholder="Select certificate type" />
+                                                    </SelectTrigger>
+                                                </FormControl>
+                                                <SelectContent>
+                                                    <SelectItem value="Completion">
+                                                        Completion
+                                                    </SelectItem>
+                                                    <SelectItem value="Certificate of Achievement">
+                                                        Certificate of Achievement
+                                                    </SelectItem>
+                                                    <SelectItem value="None">None</SelectItem>
+                                                </SelectContent>
+                                            </Select>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                            </div>
 
                             {/* Includes Certificate */}
                             <FormField
@@ -313,37 +347,6 @@ function CreateCoursePlan({ trigger }: { trigger: React.ReactNode }) {
                                         <div className="space-y-1 leading-none">
                                             <FormLabel>Includes Certificate</FormLabel>
                                         </div>
-                                    </FormItem>
-                                )}
-                            />
-
-                            {/* Certificate Type */}
-                            <FormField
-                                control={form.control}
-                                name="certificateType"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Certificate Type *</FormLabel>
-                                        <Select
-                                            onValueChange={field.onChange}
-                                            defaultValue={field.value}
-                                        >
-                                            <FormControl>
-                                                <SelectTrigger>
-                                                    <SelectValue placeholder="Select certificate type" />
-                                                </SelectTrigger>
-                                            </FormControl>
-                                            <SelectContent>
-                                                <SelectItem value="Completion">
-                                                    Completion
-                                                </SelectItem>
-                                                <SelectItem value="Certificate of Achievement">
-                                                    Certificate of Achievement
-                                                </SelectItem>
-                                                <SelectItem value="None">None</SelectItem>
-                                            </SelectContent>
-                                        </Select>
-                                        <FormMessage />
                                     </FormItem>
                                 )}
                             />
@@ -441,6 +444,25 @@ function CreateCoursePlan({ trigger }: { trigger: React.ReactNode }) {
                                         </FormControl>
                                         <div className="space-y-1 leading-none">
                                             <FormLabel>Is Active</FormLabel>
+                                        </div>
+                                    </FormItem>
+                                )}
+                            />
+
+                            {/* Is Recommended */}
+                            <FormField
+                                control={form.control}
+                                name="isRecommended"
+                                render={({ field }) => (
+                                    <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                                        <FormControl>
+                                            <Checkbox
+                                                checked={field.value}
+                                                onCheckedChange={field.onChange}
+                                            />
+                                        </FormControl>
+                                        <div className="space-y-1 leading-none">
+                                            <FormLabel>Is Recommended</FormLabel>
                                         </div>
                                     </FormItem>
                                 )}

@@ -62,6 +62,9 @@ export default function Dashboard() {
             )}
             <div className="@container/main flex flex-1 flex-col gap-2">
                 <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
+                    <div className="px-4 lg:px-6 border w-[250px] h-[200px] bg-accent border-amber-300 clip-path-curve rounded-xl">
+                        Dashboard content
+                    </div>
                     <SectionCards />
                     <div className="px-4 lg:px-6">
                         <ChartAreaInteractive />

@@ -19,6 +19,7 @@ export type TCoursePlan = {
     affiliateCommissionRate: string;
     affiliateEnabled: boolean;
     isActive: boolean;
+    isRecommended: boolean;
     createdAt: Date;
     updatedAt: Date;
 
@@ -51,6 +52,7 @@ const coursePlanSchema = z.object({
         .max(100, 'Commission rate cannot exceed 100'),
     affiliateEnabled: z.boolean(),
     isActive: z.boolean(),
+    isRecommended: z.boolean(),
 });
 
 type TCoursePlanSchema = z.infer<typeof coursePlanSchema>;

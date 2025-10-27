@@ -66,6 +66,7 @@ function EditCoursePlan({ item, trigger }: { item: TCoursePlan; trigger: React.R
             affiliateCommissionRate: 0,
             affiliateEnabled: false,
             isActive: false,
+            isRecommended: false,
         },
     });
 
@@ -91,6 +92,7 @@ function EditCoursePlan({ item, trigger }: { item: TCoursePlan; trigger: React.R
                 affiliateCommissionRate: parseFloat(item.affiliateCommissionRate) || 0,
                 affiliateEnabled: item.affiliateEnabled || false,
                 isActive: item.isActive || false,
+                isRecommended: item.isRecommended || false,
             });
         }
     }, [open, item, form]);
@@ -296,30 +298,67 @@ function EditCoursePlan({ item, trigger }: { item: TCoursePlan; trigger: React.R
                                 )}
                             />
 
-                            {/* Content Access */}
-                            <FormField
-                                control={form.control}
-                                name="contentAccess"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Content Access *</FormLabel>
-                                        <Select onValueChange={field.onChange} value={field.value}>
-                                            <FormControl>
-                                                <SelectTrigger>
-                                                    <SelectValue placeholder="Select content access" />
-                                                </SelectTrigger>
-                                            </FormControl>
-                                            <SelectContent>
-                                                <SelectItem value="Full">Full Access</SelectItem>
-                                                <SelectItem value="Partial">
-                                                    Partial Access
-                                                </SelectItem>
-                                            </SelectContent>
-                                        </Select>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
+                            <div className="flex">
+                                {/* Content Access */}
+                                <FormField
+                                    control={form.control}
+                                    name="contentAccess"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Content Access *</FormLabel>
+                                            <Select
+                                                onValueChange={field.onChange}
+                                                value={field.value}
+                                            >
+                                                <FormControl>
+                                                    <SelectTrigger>
+                                                        <SelectValue placeholder="Select content access" />
+                                                    </SelectTrigger>
+                                                </FormControl>
+                                                <SelectContent>
+                                                    <SelectItem value="Full">
+                                                        Full Access
+                                                    </SelectItem>
+                                                    <SelectItem value="Partial">
+                                                        Partial Access
+                                                    </SelectItem>
+                                                </SelectContent>
+                                            </Select>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                {/* Certificate Type */}
+                                <FormField
+                                    control={form.control}
+                                    name="certificateType"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Certificate Type *</FormLabel>
+                                            <Select
+                                                onValueChange={field.onChange}
+                                                value={field.value}
+                                            >
+                                                <FormControl>
+                                                    <SelectTrigger>
+                                                        <SelectValue placeholder="Select certificate type" />
+                                                    </SelectTrigger>
+                                                </FormControl>
+                                                <SelectContent>
+                                                    <SelectItem value="Completion">
+                                                        Completion
+                                                    </SelectItem>
+                                                    <SelectItem value="Certificate of Achievement">
+                                                        Certificate of Achievement
+                                                    </SelectItem>
+                                                    <SelectItem value="None">None</SelectItem>
+                                                </SelectContent>
+                                            </Select>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                            </div>
 
                             {/* Includes Certificate */}
                             <FormField
@@ -336,34 +375,6 @@ function EditCoursePlan({ item, trigger }: { item: TCoursePlan; trigger: React.R
                                         <div className="space-y-1 leading-none">
                                             <FormLabel>Includes Certificate</FormLabel>
                                         </div>
-                                    </FormItem>
-                                )}
-                            />
-
-                            {/* Certificate Type */}
-                            <FormField
-                                control={form.control}
-                                name="certificateType"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Certificate Type *</FormLabel>
-                                        <Select onValueChange={field.onChange} value={field.value}>
-                                            <FormControl>
-                                                <SelectTrigger>
-                                                    <SelectValue placeholder="Select certificate type" />
-                                                </SelectTrigger>
-                                            </FormControl>
-                                            <SelectContent>
-                                                <SelectItem value="Completion">
-                                                    Completion
-                                                </SelectItem>
-                                                <SelectItem value="Certificate of Achievement">
-                                                    Certificate of Achievement
-                                                </SelectItem>
-                                                <SelectItem value="None">None</SelectItem>
-                                            </SelectContent>
-                                        </Select>
-                                        <FormMessage />
                                     </FormItem>
                                 )}
                             />

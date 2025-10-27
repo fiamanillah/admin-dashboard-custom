@@ -54,8 +54,6 @@ function EditCourse({ item, trigger }: { item: TCourse; trigger: React.ReactNode
             shortDescription: item.shortDescription || '',
             thumbnailUrl: item.thumbnailUrl || '',
             difficultyLevel: item.difficultyLevel || 'beginner',
-            basePrice: Number(item.basePrice) || 0,
-            discount: Number(item.discount) || 0,
             hasFinalQuiz: item.hasFinalQuiz || false,
             passPercentage: Number(item.passPercentage) || 0,
             hasCertificate: item.hasCertificate || false,
@@ -72,8 +70,6 @@ function EditCourse({ item, trigger }: { item: TCourse; trigger: React.ReactNode
                 shortDescription: item.shortDescription || '',
                 thumbnailUrl: item.thumbnailUrl || '',
                 difficultyLevel: item.difficultyLevel || 'beginner',
-                basePrice: Number(item.basePrice) || 0,
-                discount: Number(item.discount) || 0,
                 hasFinalQuiz: item.hasFinalQuiz || false,
                 passPercentage: Number(item.passPercentage) || 0,
                 hasCertificate: item.hasCertificate || false,
@@ -192,54 +188,6 @@ function EditCourse({ item, trigger }: { item: TCourse; trigger: React.ReactNode
                                     </FormItem>
                                 )}
                             />
-
-                            <div className="flex gap-2">
-                                {/* Base Price */}
-                                <FormField
-                                    control={form.control}
-                                    name="basePrice"
-                                    render={({ field }) => (
-                                        <FormItem className="flex-1">
-                                            <FormLabel>Base Price</FormLabel>
-                                            <FormControl>
-                                                <Input
-                                                    type="number"
-                                                    placeholder="99.99"
-                                                    {...field}
-                                                    value={field.value || 0}
-                                                    onChange={e =>
-                                                        field.onChange(e.target.valueAsNumber || 0)
-                                                    }
-                                                />
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
-
-                                {/* Discount */}
-                                <FormField
-                                    control={form.control}
-                                    name="discount"
-                                    render={({ field }) => (
-                                        <FormItem className="flex-1">
-                                            <FormLabel>Discount (%)</FormLabel>
-                                            <FormControl>
-                                                <Input
-                                                    type="number"
-                                                    placeholder="20"
-                                                    {...field}
-                                                    value={field.value || 0}
-                                                    onChange={e =>
-                                                        field.onChange(e.target.valueAsNumber || 0)
-                                                    }
-                                                />
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
-                            </div>
 
                             {/* Pass Percentage */}
                             <FormField

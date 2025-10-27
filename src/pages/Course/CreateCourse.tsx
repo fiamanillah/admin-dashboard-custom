@@ -179,53 +179,6 @@ function CreateCourse({ trigger }: { trigger: React.ReactNode }) {
                                 />
                             </div>
 
-                            {/* Base Price and Discount */}
-                            <div className="flex gap-2">
-                                <FormField
-                                    control={form.control}
-                                    name="basePrice"
-                                    render={({ field }) => (
-                                        <FormItem className="flex-1">
-                                            <FormLabel>Base Price</FormLabel>
-                                            <FormControl>
-                                                <Input
-                                                    type="number"
-                                                    placeholder="99.99"
-                                                    {...field}
-                                                    value={field.value || 0}
-                                                    onChange={e =>
-                                                        field.onChange(e.target.valueAsNumber || 0)
-                                                    }
-                                                />
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
-
-                                <FormField
-                                    control={form.control}
-                                    name="discount"
-                                    render={({ field }) => (
-                                        <FormItem className="flex-1">
-                                            <FormLabel>Discount (%)</FormLabel>
-                                            <FormControl>
-                                                <Input
-                                                    type="number"
-                                                    placeholder="10"
-                                                    {...field}
-                                                    value={field.value || 0}
-                                                    onChange={e =>
-                                                        field.onChange(e.target.valueAsNumber || 0)
-                                                    }
-                                                />
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
-                            </div>
-
                             {/* Pass Percentage */}
                             <FormField
                                 control={form.control}
